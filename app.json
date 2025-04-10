@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "expo-template-default",
+    "name": "Project Team flow",
+    "slug": "project-team-flow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,13 +9,15 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.abdulramzeenorg.projectteamflow"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.abdulramzeenorg.projectteamflow"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +38,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "791d2ea0-a9b5-4f29-99d7-549808d91eab"
+      }
+    },
+    "owner": "abdul_ramzeen-org",
+    "updates": {
+      "url": "https://u.expo.dev/791d2ea0-a9b5-4f29-99d7-549808d91eab"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
