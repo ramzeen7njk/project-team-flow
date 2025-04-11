@@ -1,52 +1,54 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, Animated, Image, StyleSheet } from 'react-native';
 
-export default function Splash() {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-  const [showLoader, setShowLoader] = useState(false);
+export default function SplashScreen() {
   const router = useRouter();
 
-  useEffect(() => {
-    Animated.parallel([
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 2500,
-        useNativeDriver: true,
-      }),
-      Animated.timing(rotateAnim, {
-        toValue: 1,
-        duration: 2500,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setShowLoader(true);
+  const logoAnim = useRef(new Animated.Value(0)).current;
 
-      setTimeout(() => {
-        router.replace('/'); // navigates to home tab after loading
-      }, 3000); // loader time
-    });
+  // Flip + Zoom animation
+  useEffect(() => {
+    Animated.timing(logoAnim, {
+      toValue: 1,
+      duration: 2500,
+      useNativeDriver: true,
+    }).start();
+
+    // After animation + loader, navigate to home
+    const timeout = setTimeout(() => {
+      router.replace('/(tabs)');
+    }, 5500); // 2.5s animation + 3s loader
+
+    return () => clearTimeout(timeout);
   }, []);
 
-  const rotateY = rotateAnim.interpolate({
+  const rotateY = logoAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['180deg', '0deg'],
+  });
+
+  const scale = logoAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.5, 1],
   });
 
   return (
     <LinearGradient
       colors={['#c294ff', '#4a9bed']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
       style={styles.container}
     >
       <Animated.View
         style={[
           styles.logoContainer,
           {
-            transform: [{ scale: scaleAnim }, { rotateY }],
+            transform: [
+              { rotateY },
+              { scale },
+            ],
           },
         ]}
       >
@@ -56,10 +58,7 @@ export default function Splash() {
           resizeMode="contain"
         />
       </Animated.View>
-
-      {showLoader && (
-        <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 40 }} />
-      )}
+      <ActivityIndicator size="large" color="#fff" style={styles.loader} />
     </LinearGradient>
   );
 }
@@ -73,13 +72,14 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 200,
     height: 200,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff22',
+    marginBottom: 20,
+    backfaceVisibility: 'hidden',
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: '100%',
+    height: '100%',
+  },
+  loader: {
+    marginTop: 10,
   },
 });
